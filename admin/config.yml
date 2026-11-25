@@ -1,0 +1,68 @@
+# MovieSeen — Sveltia CMS (기존 Jekyll 글/썸네일 구조 유지)
+# 기존 .pages.yml, _posts, 사이트 디자인 파일은 변경하지 않습니다.
+backend:
+  name: github
+  repo: MovieSeen/MovieSeen.github.io
+  branch: main
+
+# GitHub 저장소 내 이미지 업로드 위치
+media_folder: /assets/images
+public_folder: /assets/images
+
+# 제목에서 새 파일명을 만들되, 날짜를 포함해 충돌을 줄입니다.
+slug:
+  encoding: ascii
+  clean_accents: true
+  timezone: local
+
+collections:
+  - name: writing
+    label: 영화 글 관리
+    label_singular: 영화 글
+    folder: /_posts
+    create: true
+    format: yaml-frontmatter
+    extension: md
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    identifier_field: title
+    fields:
+      - { name: title, label: 글 제목, widget: string }
+      - name: date
+        label: 게시일과 시간
+        widget: datetime
+        default: '{{now}}'
+        format: 'YYYY-MM-DD HH:mm:ss Z'
+      - { name: author, label: 필자, widget: string, required: false }
+      - name: section
+        label: 메뉴 분류
+        widget: select
+        options:
+          - { label: 특집기획, value: feature }
+          - { label: 비평, value: criticism }
+          - { label: 칼럼·에세이, value: essay }
+          - { label: 리뷰, value: review }
+      - name: section_label
+        label: 카드에 표시할 분류명
+        widget: select
+        options: [특집기획, 비평, 칼럼·에세이, 리뷰]
+      - { name: film, label: 영화 제목, widget: string, required: false }
+      - { name: year, label: 영화 개봉 연도, widget: number, value_type: int, required: false }
+      - { name: director, label: 감독, widget: string, required: false }
+      - { name: cover, label: 카드 대표 이미지, widget: image, required: false }
+      - name: tone
+        label: 카드 배경색 (이미지 미설정 시)
+        widget: select
+        required: false
+        options:
+          - { label: 황갈색, value: amber }
+          - { label: 보라색, value: violet }
+          - { label: 녹색, value: green }
+          - { label: 남색, value: blue }
+          - { label: 올리브색, value: olive }
+          - { label: 청록색, value: teal }
+          - { label: 빨간색, value: red }
+          - { label: 회색, value: gray }
+      - { name: subtitle, label: 부제, widget: string, required: false }
+      - name: body
+        label: 본문 (이미지 끌어다 놓기/붙여넣기 가능)
+        widget: richtext
